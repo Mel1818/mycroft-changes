@@ -27,7 +27,6 @@ from petact import install_package
 from shutil import rmtree
 from threading import Timer, Event, Thread
 from urllib.error import HTTPError
-
 from mycroft.configuration import Configuration, LocalConf, USER_CONFIG
 from mycroft.util.log import LOG
 
