@@ -44,7 +44,7 @@ class NoModelAvailable(Exception):
 
 
 class HotWordEngine:
-    def __init__(self, key_phrase="hey mycroft", config=None, lang="en-us"):
+    def __init__(self, key_phrase="hey boss", config=None, lang="en-us"):
         self.key_phrase = str(key_phrase).lower()
         # rough estimate 1 phoneme per 2 chars
         self.num_phonemes = len(key_phrase) / 2 + 1
@@ -71,7 +71,7 @@ class HotWordEngine:
 
 
 class PocketsphinxHotWord(HotWordEngine):
-    def __init__(self, key_phrase="hey mycroft", config=None, lang="en-us"):
+    def __init__(self, key_phrase="hey boss", config=None, lang="en-us"):
         super(PocketsphinxHotWord, self).__init__(key_phrase, config, lang)
         # Hotword module imports
         from pocketsphinx import Decoder
@@ -121,7 +121,7 @@ class PocketsphinxHotWord(HotWordEngine):
 
 
 class PreciseHotword(HotWordEngine):
-    def __init__(self, key_phrase="hey mycroft", config=None, lang="en-us"):
+    def __init__(self, key_phrase="hey boss", config=None, lang="en-us"):
         super(PreciseHotword, self).__init__(key_phrase, config, lang)
         from precise_runner import (
             PreciseRunner, PreciseEngine, ReadWriteStream
@@ -305,7 +305,7 @@ class HotWordFactory:
         return instance
 
     @classmethod
-    def create_hotword(cls, hotword="hey mycroft", config=None,
+    def create_hotword(cls, hotword="hey boss", config=None,
                        lang="en-us", loop=None):
         if not config:
             config = Configuration.get()['hotwords']

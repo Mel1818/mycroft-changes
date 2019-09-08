@@ -16,7 +16,7 @@
 
 # exit on any error
 set -Ee
-
+cd
 MIMIC_DIR=mimic
 CORES=$1
 MIMIC_VERSION=1.2.0.2
