@@ -71,8 +71,8 @@
   "listener": {
     "sample_rate": 16000,
     "channels": 1,
-    "wake_word": "hey mycroft",
-    "phonemes": "HH EY . M AY K R AO F T",
+    "wake_word": "hey boss",
+    "phonemes": "HH EY . B OO SSS",
     "threshold": 1e-90,
     "multiplier": 1.0,
     "energy_ratio": 1.5

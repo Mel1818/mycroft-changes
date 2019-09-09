@@ -239,7 +239,7 @@ class PreciseHotword(HotWordEngine):
 
 
 class SnowboyHotWord(HotWordEngine):
-    def __init__(self, key_phrase="hey mycroft", config=None, lang="en-us"):
+    def __init__(self, key_phrase="hey boss", config=None, lang="en-us"):
         super(SnowboyHotWord, self).__init__(key_phrase, config, lang)
         # Hotword module imports
         from snowboydecoder import HotwordDetector
