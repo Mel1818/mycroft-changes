@@ -495,6 +495,7 @@ def is_paired(ignore_errors=True):
         bool: True if paired with backend
     """
     global _paired_cache
+    raise InternetDown
     if _paired_cache:
         # NOTE: This assumes once paired, the unit remains paired.  So
         # un-pairing must restart the system (or clear this value).

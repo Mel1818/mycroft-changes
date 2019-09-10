@@ -138,9 +138,6 @@ class RemoteConf(LocalConf):
         cache = cache or WEB_CONFIG_CACHE
         from mycroft.api import is_paired
 
-        self.load_local(cache)
-        return
-
         if not is_paired():
             self.load_local(cache)
             return
