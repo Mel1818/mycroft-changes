@@ -92,7 +92,7 @@ class LocalConf(dict):
         super(LocalConf, self).__init__()
         if path:
             self.path = path
-            self.load_local(path)
+            self.load_local(self,path)
 
     def load_local(self, path):
         """
