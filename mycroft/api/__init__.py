@@ -20,16 +20,17 @@ from requests import HTTPError, RequestException
 import os
 import time
 from threading import Lock
-
+import time
 from mycroft.configuration import Configuration
 from mycroft.configuration.config import DEFAULT_CONFIG, SYSTEM_CONFIG, \
     USER_CONFIG
 from mycroft.identity import IdentityManager, identity_lock
 from mycroft.version import VersionManager
 from mycroft.util import get_arch, connected, LOG
+from mycroft.backend.Api import setting, stt, pair
 
 
-_paired_cache = False
+_paired_cache = True
 
 
 class BackendDown(RequestException):
@@ -285,17 +286,11 @@ class DeviceApi(Api):
         })
 
     def report_metric(self, name, data):
-        return self.request({
-            "method": "POST",
-            "path": "/" + self.identity.uuid + "/metric/" + name,
-            "json": data
-        })
+        dummy = "Nope no metrics"
 
     def get(self):
         """ Retrieve all device information from the web backend """
-        return self.request({
-            "path": "/" + self.identity.uuid
-        })
+        return setting()
 
     def get_settings(self):
         """ Retrieve device settings information from the web backend
@@ -303,9 +298,7 @@ class DeviceApi(Api):
         Returns:
             str: JSON string with user configuration information.
         """
-        return self.request({
-            "path": "/" + self.identity.uuid + "/setting"
-        })
+        return setting()
 
     def get_location(self):
         """ Retrieve device location information from the web backend
@@ -334,7 +327,7 @@ class DeviceApi(Api):
             subscriber.
         """
         try:
-            return self.get_subscription().get('@type') != 'free'
+            return True
         except Exception:
             # If can't retrieve, assume not paired and not a subscriber yet
             return False
@@ -364,17 +357,8 @@ class DeviceApi(Api):
 
     def get_skill_settings(self):
         """ Fetch all skill settings. """
-        with DeviceApi._skill_settings_lock:
-            if (DeviceApi._skill_settings is None or
-                    time.monotonic() > DeviceApi._skill_settings[0] + 30):
-                DeviceApi._skill_settings = (
-                    time.monotonic(),
-                    self.request({
-                        "method": "GET",
-                        "path": "/" + self.identity.uuid + "/skill"
-                        })
-                )
-            return DeviceApi._skill_settings[1]
+        settings = setting()
+        return settings["skills"]
 
     def upload_skill_metadata(self, settings_meta):
         """ Upload skill metadata.
@@ -382,11 +366,6 @@ class DeviceApi(Api):
         Arguments:
             settings_meta (dict): settings_meta typecasted to suite the backend
         """
-        return self.request({
-            "method": "PUT",
-            "path": "/" + self.identity.uuid + "/skill",
-            "json": settings_meta
-        })
 
     def delete_skill_metadata(self, uuid):
         """ Delete the current skill metadata from backend
@@ -395,15 +374,7 @@ class DeviceApi(Api):
         Args:
             uuid (str): unique id of the skill
         """
-        try:
-            LOG.debug("Deleting remote metadata for {}".format(skill_gid))
-            self.request({
-                "method": "DELETE",
-                "path": ("/" + self.identity.uuid + "/skill" +
-                         "/{}".format(skill_gid))
-            })
-        except Exception as e:
-            LOG.error("{} cannot delete metadata because this".format(e))
+        LOG.debug("Deleting remote metadata for {}")
 
     def upload_skills_data(self, data):
         """ Upload skills.json file. This file contains a manifest of installed
@@ -412,39 +383,9 @@ class DeviceApi(Api):
         Arguments:
              data: dictionary with skills data from msm
         """
-        if not isinstance(data, dict):
-            raise ValueError('data must be of type dict')
 
         # Strip the skills.json down to the bare essentials
         to_send = {}
-        if 'blacklist' in data:
-            to_send['blacklist'] = data['blacklist']
-        else:
-            LOG.warning('skills manifest lacks blacklist entry')
-            to_send['blacklist'] = []
-
-        # Make sure skills doesn't contain duplicates (keep only last)
-        if 'skills' in data:
-            skills = {s['name']: s for s in data['skills']}
-            to_send['skills'] = [skills[key] for key in skills]
-        else:
-            LOG.warning('skills manifest lacks skills entry')
-            to_send['skills'] = []
-
-        for s in to_send['skills']:
-            # Remove optional fields backend objects to
-            if 'update' in s:
-                s.pop('update')
-
-            # Finalize skill_gid with uuid if needed
-            s['skill_gid'] = s.get('skill_gid', '').replace(
-                '@|', '@{}|'.format(self.identity.uuid))
-
-        self.request({
-            "method": "PUT",
-            "path": "/" + self.identity.uuid + "/skillJson",
-            "json": to_send
-            })
 
 
 class STTApi(Api):
@@ -464,13 +405,7 @@ class STTApi(Api):
         Returns:
             str: JSON structure with transcription results
         """
-
-        return self.request({
-            "method": "POST",
-            "headers": {"Content-Type": "audio/x-flac"},
-            "query": {"lang": language, "limit": limit},
-            "data": audio
-        })
+        return stt(language, limit, audio)
 
 
 def has_been_paired():
@@ -481,8 +416,8 @@ def has_been_paired():
     """
     # This forces a load from the identity file in case the pairing state
     # has recently changed
-    id = IdentityManager.load()
-    return id.uuid is not None and id.uuid != ""
+
+    return True
 
 
 def is_paired(ignore_errors=True):
@@ -501,20 +436,3 @@ def is_paired(ignore_errors=True):
         # un-pairing must restart the system (or clear this value).
         # The Mark 1 does perform a restart on RESET.
         return True
-
-    try:
-        api = DeviceApi()
-        device = api.get()
-        _paired_cache = api.identity.uuid is not None and \
-            api.identity.uuid != ""
-        return _paired_cache
-    except HTTPError as e:
-        if e.response.status_code == 401:
-            return False
-    except Exception as e:
-        LOG.warning('Could not get device info: ' + repr(e))
-    if ignore_errors:
-        return False
-    if connected():
-        raise BackendDown
-    raise InternetDown

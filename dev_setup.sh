@@ -424,7 +424,7 @@ fi
 SYSMEM=$(free | awk '/^Mem:/ { print $2 }')
 MAXCORES=$(($SYSMEM / 512000))
 MINCORES=1
-CORES=$(nproc)
+#CORES=$(nproc)
 
 # ensure MAXCORES is > 0
 if [[ $MAXCORES -lt 1 ]] ; then

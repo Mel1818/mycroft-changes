@@ -160,20 +160,20 @@ function check-dependencies() {
         git pull
     fi
 
-    if [ ! -f .installed ] || ! md5sum -c &> /dev/null < .installed ; then
-        # Critical files have changed, dev_setup.sh should be run again
-        if [ "$auto_update" == "true" ] ; then
-            echo "Updating dependencies..."
-            bash dev_setup.sh
-        else
-            echo "Please update dependencies by running ./dev_setup.sh again."
-            if command -v notify-send >/dev/null ; then
-                # Generate a desktop notification (ArchLinux)
-                notify-send "Mycroft Dependencies Outdated" "Run ./dev_setup.sh again"
-            fi
-            exit 1
-        fi
-    fi
+#    if [ ! -f .installed ] || ! md5sum -c &> /dev/null < .installed ; then
+#        # Critical files have changed, dev_setup.sh should be run again
+#        if [ "$auto_update" == "true" ] ; then
+#            echo "Updating dependencies..."
+#            bash dev_setup.sh
+#        else
+#            echo "Please update dependencies by running ./dev_setup.sh again."
+#            if command -v notify-send >/dev/null ; then
+#                # Generate a desktop notification (ArchLinux)
+#                notify-send "Mycroft Dependencies Outdated" "Run ./dev_setup.sh again"
+#            fi
+#            exit 1
+#        fi
+#    fi
 }
 
 _opt=$1
