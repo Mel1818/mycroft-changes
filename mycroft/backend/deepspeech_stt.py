@@ -6,7 +6,7 @@ from mycroft.backend.settings import DATA_PATH, STT_CONFIG
 from mycroft.backend.utils import download, untar
 
 try:
-    from deepspeech.model import Model
+    from deepspeech import Model
 except ImportError:
     print("could not import deep speech, \n run pip install "
           "deepspeech")
