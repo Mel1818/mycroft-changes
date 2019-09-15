@@ -45,7 +45,7 @@ def gen_api(user="demo_user", save=False):
 
 
 def model_to_dict(obj):
-    serialized_data = {c.key: getattr(obj, c.key) for c in obj}
+    serialized_data = {c.key: getattr(obj, c.key) for c in obj.__dict__.keys()}
     return serialized_data
 
 
