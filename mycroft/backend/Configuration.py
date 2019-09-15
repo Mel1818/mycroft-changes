@@ -4,6 +4,7 @@ from os.path import join, expanduser, exists
 from mycroft.backend.utils import load_commented_json
 import inflection
 import re
+import mycroft.configuration
 USER_CONFIG = join(expanduser('~'), 'mycroft-changes/mycroft/configuration/mycroft.conf')
 
 
@@ -11,11 +12,7 @@ def load_local():
 
     if exists(USER_CONFIG) and isfile(USER_CONFIG):
         try:
-            result = {}
-            config = load_commented_json(USER_CONFIG)
-            for k in config:
-                key = inflection.underscore(re.sub(r"Setting(s)?", "", k))
-                result[key] =config.get(key,{})
+            config = rc = mycroft.configuration.LocalConfig(USER_CONFIG)
 
             LOG.debug("Configuration {} loaded".format(USER_CONFIG))
         except Exception as e:
@@ -24,4 +21,4 @@ def load_local():
     else:
 
         LOG.debug("Configuration '{}' not defined, skipping".format(USER_CONFIG))
-    return result
+    return config
