@@ -13,7 +13,7 @@ def load_local():
             config = load_commented_json(USER_CONFIG)
             for key in config:
                 result[key] =config[key]
-                LOG.debug(key)
+                LOG.debug(str(key))
 
             LOG.debug("Configuration {} loaded".format(USER_CONFIG))
         except Exception as e:
