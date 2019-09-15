@@ -8,7 +8,7 @@ from os.path import exists, dirname
 from threading import Thread
 import json
 from socket import gethostname
-from pyopenssl import crypto
+from OpenSSL import crypto
 import requests
 import random
 import base64
