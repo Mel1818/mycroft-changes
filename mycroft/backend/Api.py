@@ -28,7 +28,7 @@ def stt(language, limit, audio):
 
 def setting():
     config = load_local()
-    result = model_to_dict(config)
+    result = config
 
     # format result
     cleans = ["skills_dir", "skills_auto_update"]
