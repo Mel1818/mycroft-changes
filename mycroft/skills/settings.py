@@ -385,7 +385,7 @@ class SkillSettings(dict):
                 self._blank_poll_timer.daemon = True
                 self._blank_poll_timer.start()
             else:
-                self.initialize_remote_settings()
+                self.initialize_remote_settings(self)
         except DelayRequest:
             # Delay 5 minutes and retry
             self._blank_poll_timer = Timer(60 * 5,
@@ -406,7 +406,7 @@ class SkillSettings(dict):
             if not is_paired():
                 pass
             elif not self._complete_intialization:
-                self.initialize_remote_settings()
+                self.initialize_remote_settings(self)
             else:
                 self.update_remote()
         except DelayRequest:

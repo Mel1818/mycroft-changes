@@ -207,7 +207,7 @@ class Configuration:
             Returns: merged dict of all configuration files
         """
         if not configs:
-            configs = [LocalConf(DEFAULT_CONFIG), LocalConf(USER_CONFIG),
+            configs = [LocalConf(DEFAULT_CONFIG), RemoteConf(),
                        LocalConf(SYSTEM_CONFIG), LocalConf(USER_CONFIG),
                        Configuration.__patch]
         else:
