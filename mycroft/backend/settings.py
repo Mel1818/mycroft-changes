@@ -19,7 +19,7 @@ from mycroft.backend.utils import load_commented_json, \
     merge_dict
 import json
 
-DATA_PATH = join(expanduser("~"), ".mycroft", "personal_backend")
+DATA_PATH = join(expanduser("~"), "mycroft-changes/mycroft", "backend")
 if not exists(DATA_PATH):
     makedirs(DATA_PATH)
 

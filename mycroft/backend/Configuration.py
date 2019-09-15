@@ -2,7 +2,7 @@ from mycroft.util.log import LOG
 from os.path import exists, isfile
 from os.path import join, expanduser, exists
 from mycroft.backend.utils import load_commented_json
-USER_CONFIG = join(expanduser('~'), '/mycroft/configuration/mycroft.conf')
+USER_CONFIG = join(expanduser('~'), 'mycroft-changes/mycroft/configuration/mycroft.conf')
 
 
 def load_local(self):
