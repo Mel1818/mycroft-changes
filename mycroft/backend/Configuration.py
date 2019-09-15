@@ -2,6 +2,8 @@ from mycroft.util.log import LOG
 from os.path import exists, isfile
 from os.path import join, expanduser, exists
 from mycroft.backend.utils import load_commented_json
+import inflection
+import re
 USER_CONFIG = join(expanduser('~'), 'mycroft-changes/mycroft/configuration/mycroft.conf')
 
 
@@ -11,8 +13,9 @@ def load_local():
         try:
             result = {}
             config = load_commented_json(USER_CONFIG)
-            for key in config:
-                result[key] =config[key]
+            for k, v in config:
+                key = inflection.underscore(re.sub(r"Setting(s)?", "", k))
+                result[key] =config.get(key,{})
                 LOG.debug(str(key))
 
             LOG.debug("Configuration {} loaded".format(USER_CONFIG))
