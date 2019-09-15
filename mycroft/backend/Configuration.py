@@ -13,10 +13,9 @@ def load_local():
         try:
             result = {}
             config = load_commented_json(USER_CONFIG)
-            for k, v in config:
+            for k in config:
                 key = inflection.underscore(re.sub(r"Setting(s)?", "", k))
                 result[key] =config.get(key,{})
-                LOG.debug(str(key))
 
             LOG.debug("Configuration {} loaded".format(USER_CONFIG))
         except Exception as e:
