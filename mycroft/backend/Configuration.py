@@ -5,11 +5,12 @@ from mycroft.backend.utils import load_commented_json
 import inflection
 import re
 import mycroft.configuration
-USER_CONFIG = join(expanduser('~'), 'mycroft-changes/mycroft/configuration/mycroft.conf')
+USER_CONFIG = join(expanduser('~'), '.mycroft/mycroft.conf')
+# USER_CONFIG = join(expanduser('~'), '/mycroft/configuration/mycroft.conf')
 
 
 def load_local():
-
+    config = mycroft.configuration.LocalConf(USER_CONFIG)
     if exists(USER_CONFIG) and isfile(USER_CONFIG):
         try:
             mycroft.configuration.Configuration.load_config_stack([{}], True)
