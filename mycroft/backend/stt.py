@@ -20,7 +20,6 @@ from abc import ABCMeta, abstractmethod
 from requests import post, put
 from speech_recognition import Recognizer
 from mycroft.backend.settings import STT_CONFIG, LANG
-import mycroft.backend.deepspeech_stt
 
 
 class STT(object):
