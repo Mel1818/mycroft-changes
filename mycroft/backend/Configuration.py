@@ -13,6 +13,7 @@ def load_local():
     config = mycroft.configuration.LocalConf(USER_CONFIG)
     if exists(USER_CONFIG) and isfile(USER_CONFIG):
         try:
+
             mycroft.configuration.Configuration.load_config_stack([{}], True)
             config = mycroft.configuration.LocalConf(USER_CONFIG)
             LOG.debug("Configuration {} loaded".format(USER_CONFIG))
@@ -20,7 +21,11 @@ def load_local():
             LOG.error("Error loading configuration '{}'".format(USER_CONFIG))
             LOG.error(repr(e))
     else:
+<<<<<<< HEAD
         LOG.error("CONFIG NOT FOUND")
 
+=======
+        LOG.error("CONFIG not found")
+>>>>>>> 37eb3222ba5ac2e495fb273d6a5f6eccab43ef99
         LOG.debug("Configuration '{}' not defined, skipping".format(USER_CONFIG))
     return config
