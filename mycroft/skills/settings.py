@@ -211,6 +211,8 @@ class SkillSettings(dict):
         # different scenarios that may arises with settingsmeta
         self.load_skill_settings_from_file()  # loads existing settings.json
         settings_meta = self._load_settings_meta()
+        LOG.debug("MELISSA")
+        LOG.debug("MELISSA"+str(settings_meta))
         if not settings_meta:
             return
 
@@ -225,6 +227,7 @@ class SkillSettings(dict):
             return
 
         settings = self._request_my_settings(self.skill_gid)
+       
         if settings:
             self.save_skill_settings(settings)
 
@@ -268,6 +271,7 @@ class SkillSettings(dict):
                 with open(self._meta_path, encoding='utf-8') as f:
                     if json_file:
                         data = json.load(f)
+                        print("MELISSA2"+str(data))
                     else:
                         data = yaml.safe_load(f)
             except Exception as e:

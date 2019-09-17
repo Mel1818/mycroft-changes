@@ -20,6 +20,7 @@ def load_local():
             LOG.error("Error loading configuration '{}'".format(USER_CONFIG))
             LOG.error(repr(e))
     else:
+        LOG.error("CONFIG NOT FOUND")
 
         LOG.debug("Configuration '{}' not defined, skipping".format(USER_CONFIG))
     return config
