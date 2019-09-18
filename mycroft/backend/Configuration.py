@@ -10,13 +10,11 @@ USER_CONFIG = join(expanduser('~'), '.mycroft/mycroft.conf')
 
 
 def load_local():
-    config = mycroft.configuration.LocalConf(USER_CONFIG)
+    mycroft.configuration.Configuration.load_config_stack([{}], True)
+    local = mycroft.configuration.LocalConf(USER_CONFIG)
+    config = mycroft.configuration.Configuration.load_config_stack([local], True)
     if exists(USER_CONFIG) and isfile(USER_CONFIG):
         try:
-
-            mycroft.configuration.Configuration.load_config_stack([{}], True)
-            local = mycroft.configuration.LocalConf(USER_CONFIG)
-            config = mycroft.configuration.Configuration.load_config_stack([local], True)
             LOG.debug("Configuration {} loaded".format(USER_CONFIG))
         except Exception as e:
             LOG.error("Error loading configuration '{}'".format(USER_CONFIG))
