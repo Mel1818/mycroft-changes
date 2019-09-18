@@ -17,6 +17,7 @@
 import re
 import json
 import inflection
+
 from os.path import exists, isfile
 from requests import RequestException
 

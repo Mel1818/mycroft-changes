@@ -4,6 +4,8 @@ from speech_recognition import Recognizer, AudioFile
 from mycroft.backend.stt import STTFactory
 import mycroft.backend.Configuration
 import json
+from os.path import join, expanduser
+USER_CONFIG = join(expanduser('~'), '.mycroft/mycroft.conf')
 from mycroft.util.log import LOG
 recognizer = Recognizer()
 engine = STTFactory.create()
@@ -28,7 +30,7 @@ def stt(language, limit, audio):
 
 
 def setting():
-    config = mycroft.backend.Configuration.LocalConfig()
+    config = mycroft.backend.Configuration.LocalConfig(USER_CONFIG)
     result = config
     LOG.debug("MELISSA API: " + str(config))
 
