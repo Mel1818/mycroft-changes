@@ -9,7 +9,7 @@ USER_CONFIG = join(expanduser('~'), '.mycroft/mycroft.conf')
 # USER_CONFIG = join(expanduser('~'), '/mycroft/configuration/mycroft.conf')
 
 class LocalConfig(dict):
-    def __init__(self,cache=None):
+    def __init__(self, USER_CONFIG):
         super(LocalConfig, self).__init__()
         mycroft.configuration.Configuration.load_config_stack([{}], True)
         local = mycroft.configuration.LocalConf(USER_CONFIG)
@@ -17,6 +17,8 @@ class LocalConfig(dict):
         self.load(config)
 
     def load(self, config):
-        for key in config:
-            self.__setitem__(key, config[key])
-
+        for k, v in config.items():
+            if isinstance(v, (list, tuple)):
+                setattr(self, k, [LocalConfig(x) if isinstance(x, dict) else x for x in v])
+            else:
+                setattr(self, k, LocalConfig(v) if isinstance(v, dict) else v)

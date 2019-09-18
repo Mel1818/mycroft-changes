@@ -30,14 +30,14 @@ def stt(language, limit, audio):
 
 
 def setting():
-    config = mycroft.backend.Configuration.LocalConfig(USER_CONFIG)
+    config = mycroft.backend.Configuration.LocalConfig()
     result = config
     LOG.debug("MELISSA API: " + str(config))
 
     # format result
     cleans = ["skills_dir", "skills_auto_update"]
 
-    blacklisted = [skill.folder for skill in config.get("skills")
+    blacklisted = [skill.folder for skill in config.skills
                    if
                    skill.blacklisted]
     priority = [skill.folder for skill in config.skills if
