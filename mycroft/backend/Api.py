@@ -37,7 +37,7 @@ def setting():
     # format result
     cleans = ["skills_dir", "skills_auto_update"]
 
-    blacklisted = [skill.folder for skill in config.skills
+    blacklisted = [skill.folder for skill in config.get("skills")
                    if
                    skill.blacklisted]
     priority = [skill.folder for skill in config.skills if
