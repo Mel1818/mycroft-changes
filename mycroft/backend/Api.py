@@ -30,7 +30,7 @@ def stt(language, limit, audio):
 
 
 def setting():
-    config = mycroft.backend.Configuration.LocalConfig()
+    config = mycroft.backend.Configuration.LocalConfig(USER_CONFIG)
     result = config
     LOG.debug("MELISSA API: " + str(config))
 
