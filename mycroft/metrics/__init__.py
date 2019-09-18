@@ -33,13 +33,12 @@ def report_metric(name, data):
     Args:
         name (str): Name of metric. Must use only letters and hyphens
         data (dict): JSON dictionary to report. Must be valid JSON
-    """
-    try:
-        if is_paired() and Configuration().get()['opt_in']:
-            DeviceApi().report_metric(name, data)
-    except requests.RequestException as e:
-        LOG.error('Metric couldn\'t be uploaded, due to a network error ({})'
-                  .format(e))
+    # """
+    # try:
+    #     if is_paired() and Configuration().get()['opt_in']:
+    #         DeviceApi().report_metric(name, data)
+    # except requests.RequestException as e:
+    LOG.error('We just are not doing metrics right now')
 
 
 def report_timing(ident, system, timing, additional_data=None):
@@ -177,8 +176,8 @@ class MetricsPublisher:
         if 'session_id' not in events:
             session_id = SessionManager.get().session_id
             events['session_id'] = session_id
-        if self.enabled:
-            requests.post(
-                self.url,
-                headers={'Content-Type': 'application/json'},
-                data=json.dumps(events), verify=False)
+        # if self.enabled:
+        #     requests.post(
+        #         self.url,
+        #         headers={'Content-Type': 'application/json'},
+        #         data=json.dumps(events), verify=False)

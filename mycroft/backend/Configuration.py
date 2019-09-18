@@ -15,7 +15,8 @@ def load_local():
         try:
 
             mycroft.configuration.Configuration.load_config_stack([{}], True)
-            config = mycroft.configuration.LocalConf(USER_CONFIG)
+            local = mycroft.configuration.LocalConf(USER_CONFIG)
+            config = mycroft.configuration.Configuration.load_config_stack([local], True)
             LOG.debug("Configuration {} loaded".format(USER_CONFIG))
         except Exception as e:
             LOG.error("Error loading configuration '{}'".format(USER_CONFIG))

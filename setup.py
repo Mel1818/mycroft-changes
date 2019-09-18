@@ -53,7 +53,7 @@ setup(
     version=get_version(),
     license='Apache-2.0',
     author='Mycroft A.I.',
-    author_email='devs@mycroft.ai',
+    author_email='bellm1us@gmail.com',
     url='https://github.com/MycroftAI/mycroft-core',
     description='Mycroft Core',
     install_requires=required('requirements.txt'),
