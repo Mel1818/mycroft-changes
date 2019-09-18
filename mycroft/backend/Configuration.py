@@ -9,7 +9,7 @@ USER_CONFIG = join(expanduser('~'), '.mycroft/mycroft.conf')
 # USER_CONFIG = join(expanduser('~'), '/mycroft/configuration/mycroft.conf')
 
 class LocalConfig:
-    def __init__(self, cache=None):
+    def __init__(self):
         super(LocalConfig, self).__init__(None)
         mycroft.configuration.Configuration.load_config_stack([{}], True)
         local = mycroft.configuration.LocalConf(USER_CONFIG)
