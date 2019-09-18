@@ -3,6 +3,7 @@ from tempfile import NamedTemporaryFile
 from speech_recognition import Recognizer, AudioFile
 from mycroft.backend.stt import STTFactory
 import mycroft.backend.Configuration
+import mycroft.configuration
 import json
 from os.path import join, dirname, expanduser, exists
 DEFAULT_CONFIG = join(dirname(__file__), 'mycroft.conf')
@@ -31,7 +32,10 @@ def stt(language, limit, audio):
 
 
 def setting():
-    config = mycroft.backend.Configuration.LocalConfig(DEFAULT_CONFIG)
+    mycroft.configuration.Configuration.load_config_stack([{}], True)
+    local = mycroft.configuration.LocalConf(DEFAULT_CONFIG)
+    temp = mycroft.configuration.Configuration.load_config_stack([local], True)
+    config = mycroft.backend.Configuration.LocalConfig(temp)
     result = config
     LOG.debug("MELISSA API: " + str(config))
 
