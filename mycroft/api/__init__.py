@@ -56,8 +56,8 @@ class Api:
                                     USER_CONFIG],
                                    cache=False)
         config_server = config.get("server")
-        self.url = config_server.get("url")
-        self.version = config_server.get("version")
+        self.url = "http://localhost"
+        self.version = "v1"
         self.identity = IdentityManager.get()
 
     def request(self, params):
