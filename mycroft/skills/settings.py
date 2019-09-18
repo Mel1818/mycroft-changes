@@ -225,6 +225,7 @@ class SkillSettings(dict):
             return
 
         settings = self._request_my_settings(self.skill_gid)
+       
         if settings:
             self.save_skill_settings(settings)
 
