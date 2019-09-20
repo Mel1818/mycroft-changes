@@ -40,7 +40,7 @@ def setting():
     LOG.debug("MELISSA API: " + str(config))
 
     # format result
-    cleans = ["skills_dir", "skills_auto_update"]
+    cleans = ["skills_dir"]
 
     blacklisted = [skill.folder for skill in config.skills
                    if
@@ -49,7 +49,7 @@ def setting():
                 skill.priority]
 
     result["skills"] = {"directory": config.skills_dir,
-                        "auto_update": config.skills_auto_update,
+                        "auto_update": False,
                         "blacklisted_skills": blacklisted,
                         "priority_skills": priority}
 

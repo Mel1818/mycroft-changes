@@ -36,7 +36,7 @@ REGEX_SPL_CHARS = re.compile(r'[@#$%^*()<>/\|}{~:]')
 MIMIC2_URL = 'https://mimic-api.mycroft.ai/synthesize?text='
 
 # For now we only get the cache for mimic2-kusal
-TTS = 'Mimic2'
+TTS = 'Mimic'
 
 # Check for more default dialogs
 res_path = os.path.abspath(os.path.join(os.path.abspath(__file__), '..',
