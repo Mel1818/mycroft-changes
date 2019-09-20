@@ -40,7 +40,7 @@ def setting():
     LOG.debug("MELISSA API: " + str(config))
 
     # format result
-    cleans = ["skills_dir"]
+    cleans = ["skills_dir", "skills_auto_update"]
 
     blacklisted = [skill.folder for skill in config.skills
                    if
