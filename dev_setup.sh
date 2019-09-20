@@ -1,4 +1,4 @@
-!/usr/bin/env bash
+/usr/bin/env bash
 #
 # Copyright 2017 Mycroft AI Inc.
 #
@@ -72,8 +72,7 @@ for var in "$@" ; do
 	set +Ee
     fi
     if [[ $var == '-sm' ]] ; then
-#        opt_skipmimicbuild=true
-    fi
+        opt_skipmimicbuild=false
     if [[ $var == '-p' || $var == '--python' ]] ; then
         param='python'
     fi
