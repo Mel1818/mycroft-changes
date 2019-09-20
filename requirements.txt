@@ -21,7 +21,7 @@ python-vlc==1.1.2
 pulsectl==17.7.4
 google-api-python-client==1.6.4
 fasteners==0.14.1
-PyYAML==3.13
+pyyaml>=4.2b1
 deepspeech==0.5.1
 pygeoip==0.3.2
 pyOpenSSL==19.0.0
