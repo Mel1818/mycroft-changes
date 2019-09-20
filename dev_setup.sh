@@ -73,6 +73,7 @@ for var in "$@" ; do
     fi
     if [[ $var == '-sm' ]] ; then
         opt_skipmimicbuild=false
+    fi
     if [[ $var == '-p' || $var == '--python' ]] ; then
         param='python'
     fi
