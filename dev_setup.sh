@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+!/usr/bin/env bash
 #
 # Copyright 2017 Mycroft AI Inc.
 #
@@ -40,7 +40,7 @@ Options:
 }
 
 # Parse the command line
-opt_forcemimicbuild=false
+opt_forcemimicbuild=true
 opt_allowroot=false
 opt_skipmimicbuild=false
 opt_python=python3
@@ -72,7 +72,7 @@ for var in "$@" ; do
 	set +Ee
     fi
     if [[ $var == '-sm' ]] ; then
-        opt_skipmimicbuild=true
+#        opt_skipmimicbuild=true
     fi
     if [[ $var == '-p' || $var == '--python' ]] ; then
         param='python'
@@ -185,7 +185,7 @@ locally?'
             echo -e "$HIGHLIGHT Y - Mimic will be built $RESET"
         else
             echo -e "$HIGHLIGHT N - skip Mimic build $RESET"
-            opt_skipmimicbuild=true
+#            opt_skipmimicbuild=true
         fi
     fi
 
@@ -424,7 +424,7 @@ fi
 SYSMEM=$(free | awk '/^Mem:/ { print $2 }')
 MAXCORES=$(($SYSMEM / 512000))
 MINCORES=1
-#CORES=$(nproc)
+CORES=$(nproc)
 
 # ensure MAXCORES is > 0
 if [[ $MAXCORES -lt 1 ]] ; then
