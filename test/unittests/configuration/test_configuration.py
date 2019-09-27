@@ -1,6 +1,10 @@
 import mock
+import json
 from unittest import TestCase
 import mycroft.configuration
+from os.path import join, dirname
+from mycroft.backend.utils import nice_json
+DEFAULT_CONFIG = join(dirname(__file__), 'mycroft.conf')
 
 
 class TestConfiguration(TestCase):
@@ -63,6 +67,90 @@ class TestConfiguration(TestCase):
         mock_exists.return_value = False
         lc = mycroft.configuration.LocalConf('test')
         self.assertEquals(lc, {})
+
+    def test_backend(self):
+        local = mycroft.configuration.LocalConf(DEFAULT_CONFIG)
+        temp = mycroft.configuration.Configuration.load_config_stack([local], True)
+        config = mycroft.backend.Configuration.LocalConfig(temp)
+        result = config
+        # format result
+        cleans = ["skills_dir", "skills_auto_update"]
+
+        blacklisted = [skill.folder for skill in config.skills
+                       if
+                       skill.blacklisted]
+        priority = [skill.folder for skill in config.skills if
+                    skill.priority]
+
+        result["skills"] = {"directory": config.skills_dir,
+                            "auto_update": False,
+                            "blacklisted_skills": blacklisted,
+                            "priority_skills": priority}
+        self.assertIsNotNone(result["skills"])
+
+        cleans += ["listener_energy_ratio", "record_wake_words",
+                   "record_utterances", "wake_word_upload",
+                   "stand_up_word",
+                   "wake_word", "listener_sample_rate",
+                   "listener_channels",
+                   "listener_multiplier", "phoneme_duration"]
+        self.assertIsNotNone(cleans)
+
+        result["listener"] = {
+            "sample_rate": config.listener.sample_rate,
+            "record_wake_words": config.listener.record_wake_words,
+            "phoneme_duration": config.listener.phoneme_duration,
+            "wake_word_upload": {"enable": False},
+            "multiplier": config.listener.multiplier,
+            "wake_word": config.listener.wake_word,
+            "stand_up_word": config.listener.stand_up_word
+        }
+        self.assertIsNotNone(result["listener"])
+
+        result["sounds"] = {}
+        for sound in config.sounds:
+            result["sounds"][sound.name] = sound.path
+
+        result["hotwords"] = {}
+        for word in temp["hotwords"]:
+            result["hotwords"][word] = {
+                "module": temp["hotwords"][word]["module"],
+                "phonemes": temp["hotwords"][word]["phonemes"],
+                "threshold": temp["hotwords"][word]["threshold"],
+                "lang": temp["hotwords"][word]["lang"]
+            }
+        stt = config.stt
+        creds = {}
+        # if stt.engine_type == "token":
+        #     creds = {"token": stt.token}
+        # elif stt.engine_type == "basic":
+        #     creds = {"username": stt.username,
+        #              "password": stt.password}
+        # elif stt.engine_type == "key":
+        #     creds = {"client_id": stt.client_id,
+        #              "client_key": stt.client_key}
+        # elif stt.engine_type == "json":
+        #     creds = {"json": stt.client_id,
+        #              "client_key": stt.client_key}
+
+        result["stt"] = {"module": stt.module}
+                         # stt.name: {"uri": stt.uri, "lang": stt.lang,
+                         #            "credential": creds}
+                         # }
+        tts = config.tts
+        result["tts"] = {"module": tts.module,tts.module: {"lang": tts.espeak.lang, "voice": tts.espeak.voice}}
+        # if tts.engine_type == "token":
+        #     result["tts"][tts.name].merge({"token": tts.token})
+        # elif tts.engine_type == "basic":
+        #     result["tts"][tts.name].merge({"username": tts.username,
+        #                                    "password": tts.password})
+        # elif tts.engine_type == "key":
+        #     result["tts"][tts.name].merge({"client_id": tts.client_id,
+        #                                    "client_key": tts.client_key})
+        # elif tts.engine_type == "api":
+        #     result["tts"][tts.name].merge({"api_key": tts.api_key})
+        mainresult = json.dumps(result, sort_keys=True, indent=4)
+        self.assertIsNotNone(mainresult)
 
     @mock.patch('mycroft.configuration.config.RemoteConf')
     @mock.patch('mycroft.configuration.config.LocalConf')

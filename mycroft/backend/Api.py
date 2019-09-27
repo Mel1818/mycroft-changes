@@ -12,7 +12,6 @@ from mycroft.util.log import LOG
 recognizer = Recognizer()
 engine = STTFactory.create()
 
-
 def pair(self):
     # pair
     result = {"paired": True}
@@ -32,12 +31,10 @@ def stt(language, limit, audio):
 
 
 def setting():
-    mycroft.configuration.Configuration.load_config_stack([{}], True)
     local = mycroft.configuration.LocalConf(DEFAULT_CONFIG)
     temp = mycroft.configuration.Configuration.load_config_stack([local], True)
     config = mycroft.backend.Configuration.LocalConfig(temp)
     result = config
-    LOG.debug("MELISSA API: " + str(config))
 
     # format result
     cleans = ["skills_dir", "skills_auto_update"]
@@ -61,16 +58,13 @@ def setting():
                "listener_multiplier", "phoneme_duration"]
 
     result["listener"] = {
-        "sample_rate": result["listener_sample_rate"],
-        "channels": result["listener_channels"],
-        "record_wake_words": result["record_wake_words"],
-        "record_utterances": result["record_utterances"],
-        "phoneme_duration": result["phoneme_duration"],
-        "wake_word_upload": {"enable": result["wake_word_upload"]},
-        "multiplier": result["listener_multiplier"],
-        "energy_ratio": result["listener_energy_ratio"],
-        "wake_word": result["wake_word"],
-        "stand_up_word": result["stand_up_word"]
+        "sample_rate": config.listener.sample_rate,
+        "record_wake_words": config.listener.record_wake_words,
+        "phoneme_duration": config.listener.phoneme_duration,
+        "wake_word_upload": {"enable": False},
+        "multiplier": config.listener.multiplier,
+        "wake_word": config.listener.wake_word,
+        "stand_up_word": config.listener.stand_up_word
     }
 
     result["sounds"] = {}
@@ -78,51 +72,45 @@ def setting():
         result["sounds"][sound.name] = sound.path
 
     result["hotwords"] = {}
-    for word in config.hotwords:
-        result["hotwords"][word.name] = {
-            "module": word.module,
-            "phonemes": word.phonemes,
-            "threshold": word.threshold,
-            "lang": word.lang,
-            "active": word.active,
-            "listen": word.listen,
-            "utterance": word.utterance,
-            "sound": word.sound
+    for word in temp["hotwords"]:
+        result["hotwords"][word] = {
+            "module": temp["hotwords"][word]["module"],
+            "phonemes": temp["hotwords"][word]["phonemes"],
+            "threshold": temp["hotwords"][word]["threshold"],
+            "lang": temp["hotwords"][word]["lang"]
         }
+
     stt = config.stt
     creds = {}
-    if stt.engine_type == "token":
-        creds = {"token": stt.token}
-    elif stt.engine_type == "basic":
-        creds = {"username": stt.username,
-                 "password": stt.password}
-    elif stt.engine_type == "key":
-        creds = {"client_id": stt.client_id,
-                 "client_key": stt.client_key}
-    elif stt.engine_type == "json":
-        creds = {"json": stt.client_id,
-                 "client_key": stt.client_key}
+    # if stt.engine_type == "token":
+    #     creds = {"token": stt.token}
+    # elif stt.engine_type == "basic":
+    #     creds = {"username": stt.username,
+    #              "password": stt.password}
+    # elif stt.engine_type == "key":
+    #     creds = {"client_id": stt.client_id,
+    #              "client_key": stt.client_key}
+    # elif stt.engine_type == "json":
+    #     creds = {"json": stt.client_id,
+    #              "client_key": stt.client_key}
 
-    result["stt"] = {"module": stt.name,
-                     stt.name: {"uri": stt.uri, "lang": stt.lang,
-                                "credential": creds}
-                     }
+    result["stt"] = {"module": stt.module}
+    # stt.name: {"uri": stt.uri, "lang": stt.lang,
+    #            "credential": creds}
+    # }
 
     tts = config.tts
-    result["tts"] = {"module": tts.name,
-                     tts.name: {"token": tts.token,
-                                "lang": tts.lang,
-                                "voice": tts.voice,
-                                "gender": tts.gender,
-                                "uri": tts.uri}}
-    if tts.engine_type == "token":
-        result["tts"][tts.name].merge({"token": tts.token})
-    elif tts.engine_type == "basic":
-        result["tts"][tts.name].merge({"username": tts.username,
-                                       "password": tts.password})
-    elif tts.engine_type == "key":
-        result["tts"][tts.name].merge({"client_id": tts.client_id,
-                                       "client_key": tts.client_key})
-    elif tts.engine_type == "api":
-        result["tts"][tts.name].merge({"api_key": tts.api_key})
-    return nice_json(result)
+    result["tts"] = {"module": tts.module,
+                     tts.module: {"lang": tts.espeak.lang,
+                                  "voice": tts.espeak.voice}}
+    # if tts.engine_type == "token":
+    #     result["tts"][tts.name].merge({"token": tts.token})
+    # elif tts.engine_type == "basic":
+    #     result["tts"][tts.name].merge({"username": tts.username,
+    #                                    "password": tts.password})
+    # elif tts.engine_type == "key":
+    #     result["tts"][tts.name].merge({"client_id": tts.client_id,
+    #                                    "client_key": tts.client_key})
+    # elif tts.engine_type == "api":
+    #     result["tts"][tts.name].merge({"api_key": tts.api_key})
+    return json.dumps(result, sort_keys=True, indent=4)

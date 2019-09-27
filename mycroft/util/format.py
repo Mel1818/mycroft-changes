@@ -52,6 +52,7 @@ import json
 import os
 import datetime
 import re
+# from fann2 import libfann
 
 
 def _translate_word(name, lang):
