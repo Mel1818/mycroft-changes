@@ -6,11 +6,12 @@ import mycroft.backend.Configuration
 import mycroft.configuration
 import json
 from os.path import join, dirname, expanduser, exists
+from mycroft.util.log import LOG
 DEFAULT_CONFIG = join(dirname(__file__), 'mycroft.conf')
 USER_CONFIG = join(expanduser('~'), '.mycroft/mycroft.conf')
-from mycroft.util.log import LOG
 recognizer = Recognizer()
 engine = STTFactory.create()
+
 
 def pair(self):
     # pair
