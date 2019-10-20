@@ -220,18 +220,17 @@ class SkillSettings(dict):
         self._device_identity = self.api.identity.uuid
         self._api_path = "/" + self._device_identity + "/skill"
         try:
-            self._user_identity = self.api.get()['user']['uuid']
+            self._user_identity = 12
         except RequestException:
             return
 
         settings = self._request_my_settings(self.skill_gid)
-       
         if settings:
             self.save_skill_settings(settings)
 
         # TODO if this skill_gid is not a modified version check if a modified
         # version exists on the server and delete it
-
+        # self.api.get()['user']['uuid']
         # Always try to upload settingsmeta on startup
         self._upload_meta(settings_meta, self.skill_gid)
 
