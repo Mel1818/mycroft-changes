@@ -136,7 +136,7 @@ class RemoteConf(LocalConf):
     def __init__(self, cache=None):
         super(RemoteConf, self).__init__(None)
 
-        cache = cache or WEB_CONFIG_CACHE
+        cache = cache or DEFAULT_CONFIG
         from mycroft.api import is_paired
 
         if not is_paired():
@@ -207,7 +207,7 @@ class Configuration:
 
             Returns: merged dict of all configuration files
         """
-        if configs != None:
+        if configs is not None:
             configs = [LocalConf(DEFAULT_CONFIG), LocalConf(USER_CONFIG),
                        LocalConf(SYSTEM_CONFIG), LocalConf(USER_CONFIG),
                        Configuration.__patch]
