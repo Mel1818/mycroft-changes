@@ -220,7 +220,7 @@ class SkillSettings(dict):
         self._device_identity = self.api.identity.uuid
         self._api_path = "/" + self._device_identity + "/skill"
         try:
-            self._user_identity = 12
+            self._user_identity = '1'
         except RequestException:
             return
 
@@ -330,7 +330,7 @@ class SkillSettings(dict):
             self.store()
 
     def _migrate_settings(self, settings_meta):
-        """ sync settings.json and settingsmeta in memory """
+        """ sync susettings.json and settingsmeta in memory """
         meta = settings_meta.copy()
         if 'skillMetadata' not in meta:
             return meta

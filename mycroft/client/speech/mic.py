@@ -224,7 +224,7 @@ class ResponsiveRecognizer(speech_recognition.Recognizer):
         # DeviceApi().get()['user']['uuid']
 
         try:
-            self.account_id = 12
+            self.account_id = '1'
         except (requests.RequestException, AttributeError):
             self.account_id = '0'
 
