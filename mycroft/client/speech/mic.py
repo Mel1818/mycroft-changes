@@ -221,9 +221,10 @@ class ResponsiveRecognizer(speech_recognition.Recognizer):
         len_phoneme = listener_config.get('phoneme_duration', 120) / 1000.0
         self.TEST_WW_SEC = num_phonemes * len_phoneme
         self.SAVED_WW_SEC = max(3, self.TEST_WW_SEC)
+        # DeviceApi().get()['user']['uuid']
 
         try:
-            self.account_id = DeviceApi().get()['user']['uuid']
+            self.account_id = 12
         except (requests.RequestException, AttributeError):
             self.account_id = '0'
 
@@ -485,7 +486,6 @@ class ResponsiveRecognizer(speech_recognition.Recognizer):
                         if not isdir(self.saved_wake_words_dir):
                             os.mkdir(self.saved_wake_words_dir)
                         module = self.wake_word_recognizer.__class__.__name__
-
                         fn = join(self.saved_wake_words_dir,
                                   '_'.join([str(mtd[k]) for k in sorted(mtd)])
                                   + '.wav')
