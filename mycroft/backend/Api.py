@@ -67,6 +67,9 @@ def setting():
         "wake_word": config.listener.wake_word,
         "stand_up_word": config.listener.stand_up_word
     }
+    result["user"] = {
+        "uuid": config.user.uuid
+    }
 
     result["sounds"] = {}
     for sound in config.sounds:
